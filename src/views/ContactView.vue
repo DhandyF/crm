@@ -114,6 +114,22 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Table Empty -->
+            <div
+                v-if="contacts.length === 0 && isFetching === false"
+                class="d-flex justify-content-center align-items-center w-100 mt-4"
+            >
+                <i class="material-icons md-48 me-2">error_outline</i>
+                <span>You have no contact.</span>
+            </div>
+
+            <!-- Table Loader -->
+            <div v-if="isFetching" class="d-flex justify-content-center w-100 mt-4">
+                <div class="spinner-border text-secondary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
         </section>
 
         <!-- Modal -->
@@ -193,6 +209,7 @@ export default {
             selectedContact: {},
             callTimer: 0,
             timerInterval: null,
+            isFetching: false,
         };
     },
     async mounted() {
@@ -210,11 +227,14 @@ export default {
             }
         },
         async fetchContact() {
+            this.isFetching = true;
             try {
                 const params = this.$route.query ?? {};
                 const response = await getContactList(params);
                 this.contacts = response?.data ?? [];
+                this.isFetching = false;
             } catch (error) {
+                this.isFetching = false;
                 console.log('--error', getAxiosErrorMessage(error));
             }
         },
