@@ -21,3 +21,13 @@ export const storeCallLog = async (params) => {
         throw error;
     }
 }
+
+export const getCallLogs = async () => {
+    try {
+        const response = await axios.get(`${baseUrl}/log`);
+        return response?.data ?? null;
+    } catch (error) {
+        console.error(error?.message ?? '');
+        throw error;
+    }
+}

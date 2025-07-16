@@ -177,7 +177,7 @@ export default {
     },
     async mounted() {
         this.initFilter();
-        await this.getContact();
+        await this.fetchContact();
     },
     methods: {
         convertSecondToTime,
@@ -189,7 +189,7 @@ export default {
                 this.role = this.$route?.query?.role;
             }
         },
-        async getContact() {
+        async fetchContact() {
             try {
                 const params = this.$route.query ?? {};
                 const response = await getContactList(params);
@@ -209,7 +209,7 @@ export default {
 
 			this.$router.push({ query });
 
-            this.getContact();
+            this.fetchContact();
         },
         onInputCompany() {
             clearTimeout(this.debounce);
@@ -231,7 +231,7 @@ export default {
 
             this.$router.push({ query });
 
-            this.getContact();
+            this.fetchContact();
         },
         getRoleLabel(role) {
             return roles.find(item => item.key === role)?.value ?? '';

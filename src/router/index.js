@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MainView from '@/views/MainView.vue'
-// import ContactView from '@/views/ContactView.vue'
 
 Vue.use(VueRouter)
 
@@ -10,6 +9,16 @@ const routes = [
     path: '/',
     name: 'main',
     component: MainView,
+  },
+  {
+    path: '/contacts',
+    name: 'contacts',
+    component: MainView,
+  },
+  {
+    path: '/call-logs',
+    name: 'callLogs',
+    component: () => import(/* webpackChunkName: "call-logs" */ '@/views/CallLogsView.vue')
   },
 ]
 
