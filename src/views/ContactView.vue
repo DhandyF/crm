@@ -66,19 +66,38 @@
                             class=""
                         >
                             <!-- No -->
-                            <td>{{ index + 1 }}</td>
+                            <td>
+                                <span>{{ index + 1 }}</span>
+                            </td>
 
                             <!-- Name -->
-                            <td>{{ contact?.name ?? '' }}</td>
+                            <td>
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ contact?.name ?? '' }}</span>
+                                    <i
+                                        class="material-icons fs-6 cursor-pointer"
+                                        :class="{'text-danger': contact.is_favorite === 1}"
+                                        @click="setContactFavorite(contact, index)"
+                                    >
+                                        {{ contact.is_favorite === 0 ? 'favorite_outline' : 'favorite'}}
+                                    </i>
+                                </div>
+                            </td>
 
                             <!-- Phone -->
-                            <td>{{ contact?.phone ?? '' }}</td>
+                            <td>
+                                <span>{{ contact?.phone ?? '' }}</span>
+                            </td>
 
                             <!-- Company -->
-                            <td>{{ contact?.company ?? '' }}</td>
+                            <td>
+                                <span>{{ contact?.company ?? '' }}</span>
+                            </td>
 
                             <!-- Role -->
-                            <td>{{ getRoleLabel(contact?.role) }}</td>
+                            <td>
+                                <span>{{ getRoleLabel(contact?.role) }}</span>
+                            </td>
 
                             <!-- Action -->
                             <td class="d-flex justify-content-center text-success">
@@ -143,6 +162,7 @@
 import {
     getContactList,
     storeCallLog,
+    updateContact,
 } from '@/api/crm';
 import {
     convertSecondToTime,
@@ -194,6 +214,20 @@ export default {
                 const params = this.$route.query ?? {};
                 const response = await getContactList(params);
                 this.contacts = response?.data ?? [];
+            } catch (error) {
+                console.log('--error', getAxiosErrorMessage(error));
+            }
+        },
+        async setContactFavorite(contact, index) {
+            try {
+                const isFavorite = !!contact?.is_favorite;
+                const newFavoriteValue = isFavorite ? 0 : 1;
+                const params = {
+                    is_favorite: newFavoriteValue,
+                };
+
+                await updateContact(params, contact.id);
+                this.contacts[index].is_favorite = newFavoriteValue;
             } catch (error) {
                 console.log('--error', getAxiosErrorMessage(error));
             }

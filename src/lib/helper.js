@@ -28,5 +28,5 @@ export const formatTimestampToDate = (isoString) => {
     const seconds = pad(date.getSeconds());
   
     return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
-  }
+}
   
