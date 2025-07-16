@@ -121,7 +121,7 @@
                 class="d-flex justify-content-center align-items-center w-100 mt-4"
             >
                 <i class="material-icons md-48 me-2">error_outline</i>
-                <span>You have no contact.</span>
+                <span>Contact is empty.</span>
             </div>
 
             <!-- Table Loader -->
