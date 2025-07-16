@@ -82,19 +82,73 @@
 
                             <!-- Action -->
                             <td class="d-flex justify-content-center text-success">
-                                <i class="material-icons cursor-pointer">call</i>
+                                <i
+                                    class="material-icons cursor-pointer"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#call-modal"
+                                    @click="callContact(contact)"
+                                >
+                                    call
+                                </i>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </section>
+
+        <!-- Modal -->
+        <div
+            id="call-modal"
+            class="modal fade"
+            tabindex="-1"
+            aria-labelledby="call-modal"
+            aria-hidden="true"
+            data-bs-keyboard="false"
+            data-bs-backdrop="static"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body d-flex flex-column justify-content-center align-items-center p-4">
+                        <div class="d-flex justify-content-between w-100">
+                            <div></div>
+                            <h3 class="modal-title" id="exampleModalLabel">Calling...</h3>
+                            <i
+                                class="material-icons cursor-pointer"
+                                data-bs-dismiss="modal"
+                                @click="endCall('close')"
+                            >close</i>
+                        </div>
+                        <i class="material-icons call-icon">call</i>
+                        <p>{{ convertSecondToTime(callTimer) }}</p>
+                        <h5>{{ selectedContact.name }}</h5>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-center">
+                        <button
+                            type="button"
+                            class="btn btn-danger d-flex align-items-center"
+                            data-bs-dismiss="modal"
+                            @click="endCall('end-call')"
+                        >
+                            <i class="material-icons py-1">call_end</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import { getContactList } from '@/api/crm';
-import { duplicateVar, getAxiosErrorMessage } from '@/lib/helper';
+import {
+    getContactList,
+    storeCallLog,
+} from '@/api/crm';
+import {
+    convertSecondToTime,
+    duplicateVar,
+    getAxiosErrorMessage,
+} from '@/lib/helper';
 import { roles } from '@/lib/statics';
 
 const tableHeader = [
@@ -116,6 +170,9 @@ export default {
             debounce: null,
             company: '',
             selectedRole: 'All Role',
+            selectedContact: {},
+            callTimer: 0,
+            timerInterval: null,
         };
     },
     async mounted() {
@@ -123,6 +180,7 @@ export default {
         await this.getContact();
     },
     methods: {
+        convertSecondToTime,
         initFilter() {
             if (this.$route?.query?.company) {
                 this.company = this.$route?.query?.company;
@@ -178,6 +236,48 @@ export default {
         getRoleLabel(role) {
             return roles.find(item => item.key === role)?.value ?? '';
         },
+        async saveCallLog(status) {
+            const params = {
+                name: this.selectedContact?.name ?? '',
+                phone: this.selectedContact?.name ?? '',
+                duration: this.callTimer,
+                status,
+            };
+
+            try {
+                const response = await storeCallLog(params);
+                console.log('--res', response);
+            } catch (error) {
+                console.log('--error', getAxiosErrorMessage(error));
+            }
+
+            this.callTimer = 0;
+        },
+        callContact(contact) {
+            this.selectedContact = contact;
+            this.startCallTimer();
+        },
+        endCall(type) {
+            const status = type === 'end-call' ? 'Completed' : 'Missed';
+            this.saveCallLog(status);
+
+            this.stopCallTimer();
+        },
+        startCallTimer() {
+            this.timerInterval = setInterval(() => {
+                this.callTimer += 1;
+            }, 1000);
+        },
+        stopCallTimer() {
+            clearInterval(this.timerInterval);
+        },
     },
 }
 </script>
+
+<style lang="scss">
+.call-icon {
+    font-size: 50px;
+    margin: 100px 50px;
+}
+</style>
