@@ -36,6 +36,7 @@ CRM-UI/
 ├── package.json
 └── README.md
 ```
+---
 
 ## ⚙️ How to Install & Run (Local Setup)
 
@@ -68,6 +69,7 @@ CRM-UI/
 
     Visit: http://localhost:8080
 
+---
 
 ## 🐳 How to Run with Docker
 This project supports Docker to simplify setup and deployment.
@@ -85,6 +87,8 @@ This project supports Docker to simplify setup and deployment.
     ```bash
     docker-compose down
     ```
+
+---
 
 ## 📞 VoIP Call Simulation
 CRM-UI includes a mock VoIP "call" feature that simulates calling a contact. This is handled through a local mock API endpoint and triggers call log updates within the application.
