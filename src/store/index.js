@@ -32,13 +32,11 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    async fetchContactList({ commit, state }, params) {
+    async fetchContactList({ commit }, params) {
       try {
-        if (state.contacts.length <= 0) {
-          const response = await getContactList(params);
-          const contacts = response?.data ?? [];
-          commit('setContacts', contacts);
-        }
+        const response = await getContactList(params);
+        const contacts = response?.data ?? [];
+        commit('setContacts', contacts);
       } catch (error) {
         console.error('Failed to fetch contact: ', getAxiosErrorMessage(error));
       }
