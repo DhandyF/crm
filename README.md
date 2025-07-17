@@ -1,6 +1,6 @@
 # CRM-UI
 
-CRM-UI is a web-based CRM (Customer Relationship Management) dashboard application developed using **Vue 2**, **Vuex**, **Axios**, and **Bootstrap 5**. This project is designed to simulate a simple CRM system with essential features like viewing contacts, filtering them, simulating VoIP calls, and logging those calls.
+CRM-UI is a web-based CRM (Customer Relationship Management) dashboard application developed using **Vue 2**, **Vuex**, **Axios**, and **Bootstrap 5**. This project is designed to simulate a simple CRM system with essential features like viewing contacts, filtering them, mark/unmark contact as favorite, simulating VoIP calls, and logging those calls.
 
 It also includes a `Dockerfile` and `docker-compose.yml` to help users quickly run the app inside containers.
 
@@ -10,6 +10,7 @@ It also includes a `Dockerfile` and `docker-compose.yml` to help users quickly r
 
 - Display a list of contact information
 - Filter contacts by company and role
+- Mark/unmark contact as favorite
 - Simulate VoIP call with mock behavior
 - Automatically log calls made through the UI
 - Fully containerized with Docker
