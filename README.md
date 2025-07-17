@@ -53,7 +53,7 @@ CRM-UI/
 
    ```bash
    git clone https://github.com/DhandyF/crm.git
-   cd CRM-UI
+   cd crm-ui
     ```
 2. **Install dependencies**
 
