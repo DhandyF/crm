@@ -67,10 +67,8 @@
 </template>
 
 <script>
-import { getCallLogs } from '@/api/crm';
 import {
     convertSecondToTime,
-    getAxiosErrorMessage,
     formatTimestampToDate,
  } from '@/lib/helper';
 
@@ -87,9 +85,13 @@ export default {
     data() {
         return {
             tableHeader,
-            callLogs: [],
             isFetching: false,
         };
+    },
+    computed: {
+        callLogs() {
+            return this.$store.getters.callLogs ?? [];
+        },
     },
     async mounted() {
         await this.fetchCallLogs();
@@ -99,14 +101,8 @@ export default {
         formatTimestampToDate,
         async fetchCallLogs() {
             this.isFetching = true;
-            try {
-                const response = await getCallLogs();
-                this.callLogs = response?.data ?? [];
-                this.isFetching = false;
-            } catch (error) {
-                this.isFetching = false;
-                console.log('--error', getAxiosErrorMessage(error));
-            }
+            this.$store.dispatch('fetchCallLogs');
+            this.isFetching = false;
         },
     },
 }

@@ -77,7 +77,7 @@
                                     <i
                                         class="material-icons fs-6 cursor-pointer"
                                         :class="{'text-danger': contact.is_favorite === 1}"
-                                        @click="setContactFavorite(contact, index)"
+                                        @click="setFavoriteContact(contact)"
                                     >
                                         {{ contact.is_favorite === 0 ? 'favorite_outline' : 'favorite'}}
                                     </i>
@@ -176,14 +176,8 @@
 
 <script>
 import {
-    getContactList,
-    storeCallLog,
-    updateContact,
-} from '@/api/crm';
-import {
     convertSecondToTime,
     duplicateVar,
-    getAxiosErrorMessage,
 } from '@/lib/helper';
 import { roles } from '@/lib/statics';
 
@@ -201,7 +195,7 @@ export default {
     data() {
         return {
             tableHeader,
-            contacts: [],
+            // contacts: [],
             roleOptions: roles,
             debounce: null,
             company: '',
@@ -211,6 +205,11 @@ export default {
             timerInterval: null,
             isFetching: false,
         };
+    },
+    computed: {
+        contacts() {
+            return this.$store.getters.contactList;
+        },
     },
     async mounted() {
         this.initFilter();
@@ -228,29 +227,19 @@ export default {
         },
         async fetchContact() {
             this.isFetching = true;
-            try {
-                const params = this.$route.query ?? {};
-                const response = await getContactList(params);
-                this.contacts = response?.data ?? [];
-                this.isFetching = false;
-            } catch (error) {
-                this.isFetching = false;
-                console.log('--error', getAxiosErrorMessage(error));
-            }
+            const params = this.$route.query ?? {};
+            await this.$store.dispatch('fetchContactList', params);
+            this.isFetching = false;
         },
-        async setContactFavorite(contact, index) {
-            try {
-                const isFavorite = !!contact?.is_favorite;
-                const newFavoriteValue = isFavorite ? 0 : 1;
-                const params = {
-                    is_favorite: newFavoriteValue,
-                };
+        async setFavoriteContact(contact) {
+            const isFavorite = !!contact?.is_favorite;
+            const newFavoriteValue = isFavorite ? 0 : 1;
+            const params = {
+                contactId: contact.id,
+                is_favorite: newFavoriteValue,
+            };
 
-                await updateContact(params, contact.id);
-                this.contacts[index].is_favorite = newFavoriteValue;
-            } catch (error) {
-                console.log('--error', getAxiosErrorMessage(error));
-            }
+            await this.$store.dispatch('setFavoriteContact', params);
         },
         filterContact() {
             const query = duplicateVar(this.$route.query);
@@ -298,12 +287,7 @@ export default {
                 status,
             };
 
-            try {
-                const response = await storeCallLog(params);
-                console.log('--res', response);
-            } catch (error) {
-                console.log('--error', getAxiosErrorMessage(error));
-            }
+            await this.$store.dispatch('storeCallLog', params);
 
             this.callTimer = 0;
         },
