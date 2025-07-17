@@ -4,6 +4,10 @@ CRM-UI is a web-based CRM (Customer Relationship Management) dashboard applicati
 
 It also includes a `Dockerfile` and `docker-compose.yml` to help users quickly run the app inside containers.
 
+This API is designed to work with:
+- [crm-api](https://github.com/DhandyF/crm-api) (Backend - Laravel 12)
+- [crm-db](https://github.com/DhandyF/crm-db) (Database - MySQL 8.0)
+
 ---
 
 ## 📋 Features
@@ -93,3 +97,26 @@ This project supports Docker to simplify setup and deployment.
 
 ## 📞 VoIP Call Simulation
 CRM-UI includes a mock VoIP "call" feature that simulates calling a contact. This is handled through a local mock API endpoint and triggers call log updates within the application.
+
+---
+
+## 🧩 Running the Full CRM Stack in Docker
+To run the entire CRM application including the frontend, backend, and database, follow this order:
+
+### 1. Start the Database First (crm-db)
+Go to your crm-db directory and run:
+```bash
+docker-compose up -d
+```
+
+### 2. Start the Laravel API (crm-api)
+Go to your crm-api directory and run:
+```bash
+docker-compose up -d --build
+```
+
+### 3. Start the Vue Frontend (crm-ui)
+Go to your crm-ui directory and run:
+```bash
+docker-compose up -d --build # Run from this repo
+```
