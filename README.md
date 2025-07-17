@@ -147,20 +147,19 @@ By adopting a microservices-inspired approach with Docker Compose, each service 
 - Role: Persistent data storage for the application.
 - Isolation: Runs as a separate container to maintain data portability and separation.
 
-
 ### ✅ The advantages of this approach
 ➕ **Modularity & Separation of Concerns**
 
-Each service runs in its own container, allowing independent development, testing, and scaling. For example:
-- You can update or rebuild the frontend (crm-ui) without affecting the API or database.
-- The backend (crm-api) can evolve or change technologies independently.
+- Each service runs in its own container, allowing independent development, testing, and scaling. For example:
+    - You can update or rebuild the frontend (crm-ui) without affecting the API or database.
+    - The backend (crm-api) can evolve or change technologies independently.
 
 ➕ **Network Isolation with Shared Communication**
 
-By connecting services to a shared Docker external network, inter-service communication is seamless (e.g., Laravel connects to the DB using DB_HOST=crm-db).
+- By connecting services to a shared Docker external network, inter-service communication is seamless (e.g., Laravel connects to the DB using DB_HOST=crm-db).
 
 ➕ **Scalability**
-This structure sets the foundation for future scalability. For example:
-- Deploying frontend via CDN or serverless.
-- Containerizing backend with auto-scaling in Kubernetes or Docker Swarm.
-- Replacing MySQL with another database without affecting other layers.
+- This structure sets the foundation for future scalability. For example:
+    - Deploying frontend via CDN or serverless.
+    - Containerizing backend with auto-scaling in Kubernetes or Docker Swarm.
+    - Replacing MySQL with another database without affecting other layers.
